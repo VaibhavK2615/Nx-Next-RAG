@@ -19,7 +19,7 @@ A sophisticated **RAG (Retrieval-Augmented Generation)** application built with 
 ![Historical Data](apps/demoRAG/public/history.png)
 
 ### 🔹 Modal View
-![Modal](assets/images/modal.png)
+![Modal](assets/images/public/modal.png)
 
 ---
 
