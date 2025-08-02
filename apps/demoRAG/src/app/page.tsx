@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Index() {
   /*
    * Replace the elements below with your own.
@@ -34,6 +36,13 @@ export default function Index() {
                 <span>You&apos;re up and running</span>
               </h2>
               <a href="#commands"> What&apos;s next? </a>
+              <Link
+                href="./demo"
+                className="inline-block px-6 py-3 text-white font-semibold rounded-lg shadow-md
+                          bg-gradient-to-r from-pink-300 via-pink-400 to-red-300 hover:brightness-110 transition"
+              >
+                RAG Application
+              </Link>
             </div>
             <div className="logo-container">
               <svg

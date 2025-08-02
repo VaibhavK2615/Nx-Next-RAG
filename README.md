@@ -1,82 +1,81 @@
-# Org
+# 🔍 AI Price Analyzer — RAG App with Groq AI
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A sophisticated **RAG (Retrieval-Augmented Generation)** application built with **Next.js** that computes **average selling prices** based on historical market data and provides intelligent product recommendations using **vector similarity search**.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+---
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/next?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## 🌐 Live On
 
-## Finish your CI setup
+👉 [**Launch Site**](https://expo.dev/accounts/vaibhavkalvankar/projects/ExpoDemo/builds/4b3e4b43-1a0d-40ea-8a0b-81d8cf8dd2bc)
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/r6FZ7pNvap)
+---
 
+## ⚙️ Features
 
-## Run tasks
+- 🤖 **AI-Powered Price Analysis**: Uses Groq AI to analyze historical market data and predict current prices  
+- 📈 **Historical Data Integration**: Fetches and analyzes multi-year pricing trends from Supabase  
+- 🧠 **Vector Similarity Search**: Finds similar products using embeddings and semantic search  
+- 🔍 **Interactive Product Modal**: Detailed view of similar products with comprehensive metadata  
+- ⚡ **Real-time Analysis**: Live price estimation with confidence scoring  
+- 🎨 **Responsive Design**: Beautiful, mobile-friendly interface with animated backgrounds  
+- 🔔 **Toast Notifications**: User-friendly feedback system  
 
-To run the dev server for your app, use:
+---
 
-```sh
-npx nx dev demoRAG
-```
+## 🧠 Tech Stack
 
-To create a production bundle:
+- **Frontend**: Next.js, React, TypeScript  
+- **Database**: Supabase (PostgreSQL)  
+- **AI/ML**: Groq API for analysis, Vector embeddings for similarity search  
+- **Styling**: Tailwind CSS with custom animations
+- **State Management**: React Hooks  
 
-```sh
-npx nx build demoRAG
-```
+---
 
-To see all available targets to run for a project, run:
+## 🔌 API Endpoints
 
-```sh
-npx nx show project demoRAG
-```
+### `/api/groq-analyze`
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+- **Method**: `POST`  
+- **Purpose**: Analyze historical data and predict current prices  
+- **Payload**: `{ prompt: string }`  
+- **Response**: `{ result: string }`  
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Add new projects
+## 🧾 Vector Store Functions
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+- `storeProductEmbedding(metadata)`: Store product data with embeddings  
+- `searchSimilarProducts(query, limit)`: Find similar products  
 
-Use the plugin's generator to create new projects.
+---
 
-To generate a new application, use:
+## 📌 Key Features
 
-```sh
-npx nx g @nx/next:app demo
-```
+### 📊 Price Analysis
 
-To generate a new library, use:
+- Fetches historical data from Supabase  
+- Uses Groq AI for intelligent analysis  
+- Provides confidence scoring  
+- Shows price trends and predictions  
 
-```sh
-npx nx g @nx/react:lib mylib
-```
+### 🔄 Similar Products
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+- Vector-based similarity search  
+- Filters out exact matches  
+- Shows similarity percentages  
+- Interactive modal with detailed information  
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### 🖥️ User Interface
 
+- Gradient backgrounds with animated blobs  
+- Responsive design for all devices  
+- Loading states and error handling  
+- Toast notifications for user feedback  
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Install Nx Console
+## ✍️ Author
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/next?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Created by [Vaibhav Kalvankar]  
+📧 [vaibhavkalvankar97@gmail.com]

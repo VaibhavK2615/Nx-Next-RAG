@@ -6,6 +6,9 @@
     "importHelpers": true,
     "isolatedModules": true,
     "lib": ["es2022"],
+    "paths": {
+      "@org/vector-store": ["libs/vector-store/src/index.ts"]
+    },
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmitOnError": true,
