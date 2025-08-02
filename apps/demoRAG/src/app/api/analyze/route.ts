@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
 import { HuggingFaceInferenceEmbeddings } from '@langchain/community/embeddings/hf';
 import { createClient } from '@supabase/supabase-js';
+import { ReactNode } from 'react';
 
 // Define types for our data
 export interface ProductMetadata {
