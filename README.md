@@ -10,6 +10,19 @@ A sophisticated **RAG (Retrieval-Augmented Generation)** application built with 
 
 ---
 
+## 🖼️ Screenshots
+
+### 🔹 Analysis section
+![Analysis](apps/demoRAG/public/analysis.png)
+
+### 🔹 Historical Data View
+![Historical Data](apps/demoRAG/public/history.png)
+
+### 🔹 Modal View
+![Modal](assets/images/modal.png)
+
+---
+
 ## ⚙️ Features
 
 - 🤖 **AI-Powered Price Analysis**: Uses Groq AI to analyze historical market data and predict current prices  
