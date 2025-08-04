@@ -6,7 +6,7 @@ A sophisticated **RAG (Retrieval-Augmented Generation)** application built with 
 
 ## 🌐 Live On
 
-👉 [**Launch Site**](https://expo.dev/accounts/vaibhavkalvankar/projects/ExpoDemo/builds/4b3e4b43-1a0d-40ea-8a0b-81d8cf8dd2bc)
+👉 [**Launch Site**](https://nx-next-rag.vercel.app/)
 
 ---
 
