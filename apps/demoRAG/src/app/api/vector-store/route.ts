@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import { HuggingFaceInferenceEmbeddings } from '@langchain/community/embeddings/hf';
-// npm install && npm install @nx/next @supabase/supabase-js @langchain/community groq-sdk react-hot-toast @tailwindcss/postcss @types/react @eslint/eslintrc @eslint/compat @nx/eslint-plugin
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
