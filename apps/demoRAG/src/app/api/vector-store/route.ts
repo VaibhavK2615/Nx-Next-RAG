@@ -1,5 +1,8 @@
+export const runtime = 'nodejs';
+
 import { createClient } from '@supabase/supabase-js';
 import { HuggingFaceInferenceEmbeddings } from '@langchain/community/embeddings/hf';
+import { NextResponse } from 'next/server';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -307,3 +310,70 @@ export function validateMetadata(metadata: any): boolean {
 }
 
 export { supabase };
+
+
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+
+    const { action, payload, query, k, filterByCountry, filterByHsn } = body;
+
+    if (!action) {
+      return NextResponse.json(
+        { error: 'Action is required' },
+        { status: 400 }
+      );
+    }
+
+    // STORE
+    if (action === 'store') {
+      if (!payload) {
+        return NextResponse.json(
+          { error: 'Payload is required for store action' },
+          { status: 400 }
+        );
+      }
+
+      const result = await storeProductEmbedding(payload);
+      return NextResponse.json(result);
+    }
+
+    // SEARCH
+    if (action === 'search') {
+      if (!query) {
+        return NextResponse.json(
+          { error: 'Query is required for search action' },
+          { status: 400 }
+        );
+      }
+
+      const results = await searchSimilarProducts(
+        query,
+        k ?? 8,
+        filterByCountry,
+        filterByHsn
+      );
+
+      return NextResponse.json(results);
+    }
+
+    // CLEANUP
+    if (action === 'cleanup') {
+      const deletedCount = await cleanupRecordsWithoutPrices();
+      return NextResponse.json({ deletedCount });
+    }
+
+    return NextResponse.json(
+      { error: `Unknown action: ${action}` },
+      { status: 400 }
+    );
+
+  } catch (error: any) {
+    console.error('API /vector-store error:', error);
+    return NextResponse.json(
+      { error: error?.message || 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

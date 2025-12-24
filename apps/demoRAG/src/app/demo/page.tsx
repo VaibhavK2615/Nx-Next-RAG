@@ -5,8 +5,8 @@ import type React from "react"
 import Head from "next/head"
 import { createClient } from "@supabase/supabase-js"
 import { toast } from "react-hot-toast"
-import { storeProductEmbedding, searchSimilarProducts } from "../api/vector-store/route"
-import type { SimilarProductResult, ProductMetadata } from "../api/analyze/route"
+// import { storeProductEmbedding, searchSimilarProducts } from "../api/vector-store/route"
+// import type { SimilarProductResult, ProductMetadata } from "../api/analyze/route"
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ""
@@ -19,6 +19,41 @@ interface ProductModalProps {
   isOpen: boolean
   onClose: () => void
 }
+
+// Similar Product Component
+interface SimilarProductResult {
+  content: string;
+  metadata: {
+    name: string;
+    hsn_code: string;
+    country: string;
+    description?: string;
+    prices?: Record<string, number>;
+    years?: string[];
+    currencies?: Record<string, string>;
+    type?: string;
+    created_at?: string;
+    updated_at?: string;
+  };
+  similarity: number;
+  hsn_code: string;
+  country: string;
+}
+
+//Product Component
+export interface ProductMetadata {
+  name: string;
+  hsn_code: string;
+  country: string;
+  description?: string;
+  prices?: Record<string, number>;
+  years?: string[];
+  currencies?: Record<string, string>;
+  type?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 
 function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   if (!isOpen || !product) return null
@@ -355,43 +390,63 @@ export default function DemoPage() {
       const data = await fetchHistoricalData(hsnCode, country.toUpperCase())
       setHistoricalData(data)
 
-      // Store product embedding with historical data
-      await storeProductEmbedding({
-        hsn_code: hsnCode,
-        name: product,
-        country: country.toUpperCase(),
-        description: `Historical prices for ${product} in ${country}`,
-        prices: data.reduce(
-          (acc, curr) => {
-            acc[curr.year] = curr.price
-            return acc
+      const prices: Record<string, number> = {}
+      const currencies: Record<string, string> = {}
+      const years: string[] = []
+
+      for (const row of data) {
+        prices[row.year] = row.price
+        currencies[row.year] = row.currency
+        years.push(row.year)
+      }
+
+      // Store embedding
+      const storeRes = await fetch("/api/vector-store", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "store",
+          payload: {
+            hsn_code: hsnCode,
+            name: product,
+            country: country.toUpperCase(),
+            description: `Historical prices for ${product} in ${country}`,
+            prices,
+            years,
+            currencies,
           },
-          {} as Record<string, number>,
-        ),
-        years: data.map((d) => d.year),
-        currencies: data.reduce(
-          (acc, curr) => {
-            acc[curr.year] = curr.currency
-            return acc
-          },
-          {} as Record<string, string>,
-        ),
+        }),
       })
 
-      // Find similar products
-      const similarProductsResults = await searchSimilarProducts(
-        `${product} ${hsnCode} ${country}`,
-        10, // Get more results to account for filtering
-      )
+      if (!storeRes.ok) {
+        const err = await storeRes.text()
+        console.error("Store failed:", err)
+        throw new Error("Vector store failed")
+      }
 
-      // Filter out the current product (same HSN code and country)
-      const filteredSimilarProducts = similarProductsResults.filter((item) => {
-        const isSameHsn = item.hsn_code === hsnCode
-        const isSameCountry = item.country.toUpperCase() === country.toUpperCase()
 
-        // Exclude if both HSN and country match
-        return !(isSameHsn && isSameCountry)
+      // Search similar
+      const res = await fetch("/api/vector-store", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "search",
+          query: `${product} ${hsnCode} ${country}`,
+          k: 10,
+        }),
       })
+
+      const similarProductsResults: SimilarProductResult[] = await res.json();
+
+      const filteredSimilarProducts = similarProductsResults.filter(
+        (item: SimilarProductResult) => {
+          const isSameHsn = item.metadata?.hsn_code === hsnCode;
+          const isSameCountry =
+            item.metadata?.country?.toUpperCase() === country.toUpperCase();
+
+          return !(isSameHsn && isSameCountry);
+        }
+      );
 
       setSimilarProducts(
         filteredSimilarProducts
@@ -403,27 +458,27 @@ export default function DemoPage() {
       )
 
       // Step 2: Analyze with Groq
-      const { analysis, currentPrice, confidence } = await analyzeWithGroq(product, country, data)
+      const { analysis, currentPrice, confidence } = await analyzeWithGroq(product, country, data);
 
       // Step 3: Display results
-      let resultText = analysis + "\n\n"
+      let resultText = analysis + "\n\n";
 
       if (currentPrice) {
         const currency = data[0]?.currency || "USD"
         const formattedPrice = new Intl.NumberFormat(undefined, {
           style: "currency",
           currency: currency,
-        }).format(currentPrice)
+        }).format(currentPrice);
 
-        resultText += `Current Estimated Price (${confidence} confidence): ${formattedPrice}`
+        resultText += `Current Estimated Price (${confidence} confidence): ${formattedPrice}`;
       }
 
-      setResult(resultText)
-      setShowSimilarProducts(true)
+      setResult(resultText);
+      setShowSimilarProducts(true);
     } catch (error) {
-      toast.error("Failed to analyze price data")
+      toast.error("Failed to analyze price data");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
