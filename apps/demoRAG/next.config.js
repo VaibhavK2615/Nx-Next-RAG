@@ -1,20 +1,24 @@
-//@ts-check
+import type { NextConfig } from "next";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { composePlugins, withNx } = require('@nx/next');
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
 
-/**
- * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
- **/
-const nextConfig = {
-  // Use this to set Nx-specific options
-  // See: https://nx.dev/recipes/next/next-config-setup
-  nx: {},
+  // Required because LangChain + HuggingFace use Node APIs
+  experimental: {
+    serverActions: true,
+  },
+
+  webpack: (config) => {
+    // Fix for "node:module" and other node: imports
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      crypto: false,
+    };
+
+    return config;
+  },
 };
 
-const plugins = [
-  // Add more Next.js plugins to this list if needed.
-  withNx,
-];
-
-module.exports = composePlugins(...plugins)(nextConfig);
+export default nextConfig;
