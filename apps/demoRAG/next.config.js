@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
 
   // Required because LangChain + HuggingFace use Node APIs
@@ -9,7 +8,6 @@ const nextConfig: NextConfig = {
   },
 
   webpack: (config) => {
-    // Fix for "node:module" and other node: imports
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -21,4 +19,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
