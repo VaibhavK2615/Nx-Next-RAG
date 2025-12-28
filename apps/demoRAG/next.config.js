@@ -2,9 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // Required because LangChain + HuggingFace use Node APIs
   experimental: {
-    serverActions: true,
+    serverActions: {},
   },
 
   webpack: (config) => {
