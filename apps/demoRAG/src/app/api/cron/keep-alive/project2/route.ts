@@ -1,15 +1,22 @@
 import { NextResponse } from "next/server";
-import { createSupabase } from "@/lib/supabaseCron";
+import { createClient } from "@supabase/supabase-js";
 
-export const runtime = "nodejs";
+function createSupabase(url: string, key: string) {
+  return createClient(url, key, {
+    auth: {
+      persistSession: false,
+    },
+  });
+}
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL2!;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY2!;
 
 export async function GET() {
   try {
-    const supabase = createSupabase(
-      process.env.NEXT_PUBLIC_SUPABASE_URL2!,
-      process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY2!
-    );
+    const supabase = createSupabase(SUPABASE_URL, SUPABASE_KEY);
 
+    // lightweight keep-alive query
     const { error } = await supabase
       .from("documents")
       .select("id")
@@ -19,14 +26,13 @@ export async function GET() {
 
     return NextResponse.json({
       ok: true,
-      project: "project-2",
+      project: "project-1",
       timestamp: new Date().toISOString(),
     });
   } catch (err) {
     return NextResponse.json(
       {
         ok: false,
-        project: "project-2",
         error: err instanceof Error ? err.message : "Unknown error",
       },
       { status: 500 }
